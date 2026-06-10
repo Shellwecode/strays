@@ -19,7 +19,9 @@ function run(detector: Detector): void {
   let cat: CatHandle | null = null
   let container: HTMLDivElement | null = null
   let confirmTimer: number | null = null
-  let lastDetect = 0
+  // performance.now() can be < MIN_DETECT_GAP_MS in a fresh iframe; seed so
+  // the initial check is never throttled away.
+  let lastDetect = -MIN_DETECT_GAP_MS
 
   const observer = new MutationObserver(onSignal)
   const poll = window.setInterval(onSignal, POLL_MS)

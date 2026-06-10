@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zoom — waiting room (harness)</title>
+    <style>
+      * { margin: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        background: #f7f7f8;
+        color: #222;
+        font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-top: 22vh;
+      }
+      h1 { font-size: 17px; font-weight: 700; margin-bottom: 14px; }
+      p { font-size: 13px; color: #6c6c70; max-width: 360px; line-height: 1.5; }
+      .back { position: fixed; top: 12px; left: 12px; color: #9a9aa0; font-size: 12px; text-decoration: none; }
+      #dead-space { position: fixed; left: 0; right: 0; bottom: 0; height: 150px; }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="/index.html">&larr; harness</a>
+    <main>
+      <h1>The host will let you in soon.</h1>
+      <p>We recommend checking your audio settings while you wait by clicking on “Test Speaker and Mic.”</p>
+    </main>
+    <div id="dead-space"></div>
+    <script type="module" src="../harness.ts"></script>
+  </body>
+</html>

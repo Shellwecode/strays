@@ -11,8 +11,11 @@ export interface Detector {
   detect(): Detection
 }
 
-// Tolerant of Zoom's wording variants ("the host" / "host", "this meeting").
-const WAITING_RE = /waiting for (the )?host to start/i
+// Two distinct Zoom lobby flows, wording confirmed against the real client:
+// - host hasn't started:  "Waiting for the host to start this meeting"
+// - waiting room (admit): "The host will let you in soon." /
+//                         "The host will admit you when they're ready"
+const WAITING_RE = /waiting for (the )?host to start|host will (admit you|let you in)/i
 
 // MVP placement: fixed strip along the bottom of the viewport. Measuring
 // true empty regions per-site is post-MVP.
@@ -33,9 +36,26 @@ function findWaitingTextNode(): Text | null {
   return walker.nextNode() as Text | null
 }
 
+// Zoom's PWA shell (app.zoom.us) repeats the waiting text in its meeting
+// card while the real lobby lives in a "webclient" iframe. With all_frames
+// the script runs in both; the shell defers to the inner frame so exactly
+// one cat spawns.
+function hasWebclientChildFrame(): boolean {
+  for (const frame of document.querySelectorAll('iframe')) {
+    const name = frame.getAttribute('name') ?? ''
+    const src = frame.getAttribute('src') ?? ''
+    if (name.includes('webclient') || src.includes('webclient') || src.includes('/wc/')) {
+      return true
+    }
+  }
+  return false
+}
+
 export const zoomDetector: Detector = {
   detect(): Detection {
-    if (!findWaitingTextNode()) return { active: false, deadSpaceRect: null }
+    if (hasWebclientChildFrame() || !findWaitingTextNode()) {
+      return { active: false, deadSpaceRect: null }
+    }
     return {
       active: true,
       deadSpaceRect: new DOMRect(
