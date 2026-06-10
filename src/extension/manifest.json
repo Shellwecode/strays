@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Greenroom",
+  "version": "0.1.0",
+  "description": "A small pixel cat keeps you company in video-call waiting rooms. It leaves when the meeting starts.",
+  "content_scripts": [
+    {
+      "matches": ["*://*.zoom.us/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

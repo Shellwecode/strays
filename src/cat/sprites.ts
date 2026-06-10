@@ -2,6 +2,10 @@
 // scripts/build-sprites.mjs (npm run sprites); an Aseprite export with the
 // same layout can replace assets/sesame.png without touching this file.
 
+// Vite asset import: a URL in the dev harness, inlined as a data URL in the
+// extension build so content.js is self-contained (no web_accessible_resources).
+import sheetUrl from '../../assets/sesame.png'
+
 export const FRAME_W = 32
 export const FRAME_H = 32
 export const ORIGIN_X = 16 // feet center within a frame
@@ -27,6 +31,6 @@ export const SIT_PUPILS: ReadonlyArray<readonly [number, number]> = [
 
 export function loadSpriteSheet(): HTMLImageElement {
   const img = new Image()
-  img.src = new URL('../../assets/sesame.png', import.meta.url).href
+  img.src = sheetUrl
   return img
 }
