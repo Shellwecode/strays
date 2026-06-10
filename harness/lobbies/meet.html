@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meet - quj-xkcd-pfo</title>
+    <style>
+      * { margin: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        background: #fff;
+        color: #202124;
+        font-family: "Google Sans", Roboto, -apple-system, Helvetica, Arial, sans-serif;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 24px;
+      }
+      .logo { font-size: 20px; color: #5f6368; }
+      .logo b { color: #1a73e8; font-weight: 500; }
+      .back { color: #5f6368; font-size: 12px; text-decoration: none; }
+      main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 64px;
+        padding-top: 9vh;
+        flex-wrap: wrap;
+      }
+      .preview {
+        width: 480px;
+        max-width: 90vw;
+        aspect-ratio: 16 / 9;
+        background: #202124;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 18px;
+        color: #e8eaed;
+        font-size: 15px;
+      }
+      .preview .controls { display: flex; gap: 14px; }
+      .preview .controls i {
+        width: 44px; height: 44px; border-radius: 50%;
+        border: 1px solid #5f6368;
+        display: inline-block;
+      }
+      .join { text-align: center; }
+      .join h1 { font-size: 26px; font-weight: 400; margin-bottom: 10px; }
+      .join p { color: #5f6368; font-size: 14px; margin-bottom: 28px; }
+      .join button {
+        padding: 12px 28px;
+        border: none;
+        border-radius: 24px;
+        background: #1a73e8;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .join button:hover { background: #1765cc; }
+      #dead-space { position: fixed; left: 0; right: 0; bottom: 0; height: 150px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo"><b>Google</b> Meet</div>
+      <a class="back" href="/index.html">&larr; harness</a>
+    </header>
+    <main>
+      <div class="preview">
+        <span>Camera is off</span>
+        <div class="controls"><i></i><i></i></div>
+      </div>
+      <div class="join">
+        <h1>Ready to join?</h1>
+        <p>No one else is here</p>
+        <button>Ask to join</button>
+      </div>
+    </main>
+    <div id="dead-space"></div>
+    <script type="module" src="../harness.ts"></script>
+  </body>
+</html>

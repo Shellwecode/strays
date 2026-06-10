@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Launch Meeting - Zoom</title>
+    <style>
+      * { margin: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        background: #1b1b1f;
+        color: #fff;
+        font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+      }
+      .logo { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+      .back { color: #7e858f; font-size: 12px; text-decoration: none; }
+      .back:hover { color: #cfd6dd; }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-top: 14vh;
+      }
+      .dots { display: flex; gap: 6px; margin-bottom: 28px; }
+      .dots i {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #0e72ed; opacity: 0.3;
+        animation: pulse 1.6s ease-in-out infinite;
+      }
+      .dots i:nth-child(2) { animation-delay: 0.25s; }
+      .dots i:nth-child(3) { animation-delay: 0.5s; }
+      @keyframes pulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.85; } }
+      h1 { font-size: 22px; font-weight: 600; margin-bottom: 12px; }
+      .topic { font-size: 15px; color: #b8bcc4; margin-bottom: 6px; }
+      .meta { font-size: 13px; color: #7e858f; }
+      .audio {
+        margin-top: 48px;
+        padding: 10px 22px;
+        border-radius: 8px;
+        border: 1px solid #45484f;
+        background: transparent;
+        color: #d7dae0;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .audio:hover { background: #26282e; }
+      #dead-space { position: fixed; left: 0; right: 0; bottom: 0; height: 150px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">zoom</div>
+      <a class="back" href="/index.html">&larr; harness</a>
+    </header>
+    <main>
+      <div class="dots"><i></i><i></i><i></i></div>
+      <h1>Waiting for the host to start this meeting</h1>
+      <p class="topic">Quarterly planning sync</p>
+      <p class="meta">Meeting ID: 824 5531 0042</p>
+      <button class="audio">Test Speaker and Microphone</button>
+    </main>
+    <div id="dead-space"></div>
+    <script type="module" src="../harness.ts"></script>
+  </body>
+</html>
