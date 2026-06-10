@@ -4,7 +4,9 @@
 // disconnect everything. No end card, no message, no sound.
 
 import { createCat, type CatHandle } from '../cat/mount'
-import { zoomDetector, type Detector } from './detectors/zoom'
+import { zoomDetector } from './detectors/zoom'
+import { meetDetector } from './detectors/meet'
+import type { Detector } from './detectors/types'
 
 const DEBOUNCE_MS = 300 // SPA re-renders must not double-spawn or flap
 const POLL_MS = 1500 // safety net for changes the observer can miss
@@ -12,7 +14,8 @@ const MIN_DETECT_GAP_MS = 100 // don't walk the DOM 60x/s during mutation storms
 
 function pickDetector(): Detector | null {
   if (/(^|\.)zoom\.us$/.test(location.hostname)) return zoomDetector
-  return null // meet detector lands in phase 4
+  if (location.hostname === 'meet.google.com') return meetDetector
+  return null
 }
 
 function run(detector: Detector): void {
@@ -67,7 +70,7 @@ function run(detector: Detector): void {
       'position: fixed',
       'left: 0',
       'right: 0',
-      'bottom: 0',
+      'bottom: 24px', // keep the cat off footer/copyright text
       `height: ${Math.round(rect.height)}px`,
       'pointer-events: none', // never steal a click from the lobby UI
       'z-index: 2147483000',

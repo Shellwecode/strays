@@ -29,7 +29,7 @@ strays/
 ├── src/
 │   ├── cat/                  # framework-free, no extension imports
 │   │   ├── fsm.ts            # state machine: states, transitions, timers
-│   │   ├── renderer.ts       # canvas sprite renderer, 2x pixel scale
+│   │   ├── renderer.ts       # canvas sprite renderer, integer pixel scale (currently 3x)
 │   │   ├── sprites.ts        # pixel matrices / sprite sheet loader
 │   │   ├── input.ts          # pointer proximity, click hit-testing
 │   │   └── mount.ts          # createCat(container) -> { destroy(opts) }

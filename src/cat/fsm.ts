@@ -3,6 +3,9 @@
 export const BLINK_MIN_MS = 2000
 export const BLINK_MAX_MS = 5500
 export const BLINK_MS = 140
+export const EAR_TWITCH_MIN_MS = 6000
+export const EAR_TWITCH_MAX_MS = 14_000
+export const EAR_TWITCH_MS = 120
 export const TAIL_SWAY_HZ = 2.2
 export const GAZE_RANGE_PX = 130
 
@@ -47,6 +50,8 @@ export interface Fsm {
   wanderDecideInMs: number
   blinkInMs: number // countdown to next blink
   blinkLeftMs: number // >0 while eyelids are closed
+  twitchInMs: number // countdown to next ear twitch (idle only)
+  twitchLeftMs: number // >0 while the ear is flicked
   stretchLeftMs: number // >0 while the wake-stretch plays
   gaitT: number
   pointer: { x: number; y: number; active: boolean }
@@ -67,6 +72,8 @@ export function createFsm(width: number, groundY: number): Fsm {
     wanderDecideInMs: rand(WANDER_DECIDE_MIN_MS, WANDER_DECIDE_MAX_MS),
     blinkInMs: rand(BLINK_MIN_MS, BLINK_MAX_MS),
     blinkLeftMs: 0,
+    twitchInMs: rand(EAR_TWITCH_MIN_MS, EAR_TWITCH_MAX_MS),
+    twitchLeftMs: 0,
     stretchLeftMs: 0,
     gaitT: 0,
     pointer: { x: -9999, y: -9999, active: false },
@@ -96,6 +103,7 @@ export function update(f: Fsm, dt: number, width: number): void {
   f.stateT += dt
   f.sincePointerMs += dt
   if (f.stretchLeftMs > 0) f.stretchLeftMs = Math.max(0, f.stretchLeftMs - dt)
+  if (f.twitchLeftMs > 0) f.twitchLeftMs = Math.max(0, f.twitchLeftMs - dt)
 
   // Blink runs in every awake state.
   if (f.state !== 'sleep') {
@@ -115,6 +123,11 @@ export function update(f: Fsm, dt: number, width: number): void {
       if (f.sincePointerMs >= SLEEP_AFTER_MS) {
         setState(f, 'yawn') // yawn, then settle into sleep
         break
+      }
+      f.twitchInMs -= dt
+      if (f.twitchInMs <= 0) {
+        f.twitchLeftMs = EAR_TWITCH_MS
+        f.twitchInMs = rand(EAR_TWITCH_MIN_MS, EAR_TWITCH_MAX_MS)
       }
       f.wanderDecideInMs -= dt
       if (f.wanderDecideInMs <= 0) {

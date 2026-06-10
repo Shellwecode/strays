@@ -28,6 +28,7 @@ import {
   SIT_PUPILS,
   SLEEP_FRAMES,
   STRETCH_FRAMES,
+  TWITCH_FRAME,
   WALK_FRAMES,
   YAWN_FRAMES,
   loadSpriteSheet,
@@ -40,7 +41,8 @@ const TABBY = '#6c6459'
 const TABBY_DARK = '#4b453d'
 const PUPIL = '#2b2118'
 const PINK = '#e9a9b2'
-const SHADOW = 'rgba(0, 0, 0, 0.07)'
+const SHADOW_CORE = 'rgba(0, 0, 0, 0.04)' // rim + core overlap reads ~7%
+const SHADOW_RIM = 'rgba(0, 0, 0, 0.03)'
 
 interface Heart {
   x: number
@@ -127,6 +129,7 @@ export function createRenderer(): Renderer {
       return STRETCH_FRAMES[Math.min(2, Math.floor(p * 3))]
     }
     if (f.blinkLeftMs > 0) return BLINK_FRAME
+    if (f.twitchLeftMs > 0 && f.state === 'idle') return TWITCH_FRAME
     return IDLE_FRAMES[Math.floor(nowMs / IDLE_FRAME_MS) % 2]
   }
 
@@ -170,9 +173,16 @@ export function createRenderer(): Renderer {
 
     const sleeping = f.state === 'sleep'
 
-    ctx.fillStyle = SHADOW
+    // Two stacked ellipses fake a soft penumbra: ~7% in the core fading to
+    // ~3% at the rim. Widens when sleeping.
+    const shadowRx = (sleeping ? 21 : 16) * U
+    ctx.fillStyle = SHADOW_RIM
     ctx.beginPath()
-    ctx.ellipse(f.x, f.groundY + 4, (sleeping ? 21 : 16) * U, 3.5 * U, 0, 0, Math.PI * 2)
+    ctx.ellipse(f.x, f.groundY + 4, shadowRx * 1.25, 4.2 * U, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = SHADOW_CORE
+    ctx.beginPath()
+    ctx.ellipse(f.x, f.groundY + 4, shadowRx, 3.2 * U, 0, 0, Math.PI * 2)
     ctx.fill()
 
     // Pet squish is procedural; everything else is frames.
@@ -201,7 +211,7 @@ export function createRenderer(): Renderer {
         FRAME_W * U,
         FRAME_H * U,
       )
-      if (IDLE_FRAMES.includes(frame)) {
+      if (IDLE_FRAMES.includes(frame) || frame === TWITCH_FRAME) {
         const [pdx, pdy] = pupilOffset(f)
         ctx.save()
         ctx.scale(U, U)

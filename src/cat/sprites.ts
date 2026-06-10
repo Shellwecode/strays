@@ -19,6 +19,7 @@ export const STRETCH_FRAMES = [9, 10, 11]
 export const YAWN_FRAMES = [12, 13] // mouth ajar, mouth wide
 export const ROLL_FRAMES = [14, 15, 16, 17] // side, back, back-wiggle, side
 export const EAT_FRAMES = [18, 19] // nibble pair
+export const TWITCH_FRAME = 20 // sit with the left ear flicked
 
 export const IDLE_FRAME_MS = 1200 // sit breathing cadence
 

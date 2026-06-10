@@ -10,6 +10,7 @@
 //   12,13 yawn (small, wide)
 //   14-17 roll (side, back, back-wiggle, side)
 //   18,19 eat (head down, nibble)
+//   20    sit with ear twitch
 // The awake tail is NOT in the sheet — the renderer draws it procedurally so
 // it can sway continuously. Sleep frames include the tucked tail.
 
@@ -20,7 +21,7 @@ import { fileURLToPath } from 'node:url'
 
 const FRAME_W = 32
 const FRAME_H = 32
-const FRAMES = 20
+const FRAMES = 21
 const ORIGIN_X = 16 // feet center within a frame
 const ORIGIN_Y = 30
 
@@ -65,7 +66,7 @@ function rect(frame, x, y, w, h, c) {
 // Sitting: rear mound, upright chest column with white bib, head on top.
 // breath=1 lowers the mound a hair (exhale). Diamond face: narrow forehead,
 // wide cheeks, narrow muzzle. Big ears.
-function sit(f, { breath = 0, eyes = 'open' } = {}) {
+function sit(f, { breath = 0, eyes = 'open', twitch = false } = {}) {
   rect(f, -11, -11 + breath, 13, 11 - breath, TABBY) // rear mound (saddle)
   rect(f, -9, -11 + breath, 2, 4, TABBY_DARK) // mound stripes
   rect(f, -5, -11 + breath, 2, 4, TABBY_DARK)
@@ -77,13 +78,19 @@ function sit(f, { breath = 0, eyes = 'open' } = {}) {
   rect(f, 1, -22, 14, 4, TABBY) // eye mask band
   rect(f, 1, -18, 14, 1, CREAM) // white lower cheeks
   rect(f, 4, -17, 9, 3, CREAM) // white muzzle + chin
-  rect(f, 1, -30, 5, 6, TABBY) // big ears
+  if (twitch) {
+    rect(f, 1, -28, 5, 4, TABBY) // left ear flicked: folded low
+    rect(f, 4, -30, 2, 2, TABBY) // with the tip kicked sideways
+  } else {
+    rect(f, 1, -30, 5, 6, TABBY) // big ears
+  }
   rect(f, 10, -30, 5, 6, TABBY)
   rect(f, 5, -25, 1, 2, TABBY_DARK) // forehead stripes
   rect(f, 7, -25, 1, 3, TABBY_DARK)
   rect(f, 9, -25, 1, 2, TABBY_DARK)
   rect(f, 8, -24, 2, 6, CREAM) // blaze up between the eyes
-  rect(f, 3, -29, 2, 3, PINK) // inner ears
+  if (twitch) rect(f, 3, -27, 2, 2, PINK) // inner ear rides the fold
+  else rect(f, 3, -29, 2, 3, PINK) // inner ears
   rect(f, 12, -29, 2, 3, PINK)
   rect(f, 8, -17, 2, 1, PINK) // nose at the blaze bottom
 
@@ -313,6 +320,7 @@ rollBack(16, 1)
 rollSide(17)
 eat(18, 0)
 eat(19, 1)
+sit(20, { breath: 0, eyes: 'open', twitch: true }) // ear twitch
 
 // ---- minimal PNG encoder ------------------------------------------------
 
