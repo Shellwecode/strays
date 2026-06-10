@@ -16,7 +16,7 @@ When in doubt, the cat does less.
 ## Repo structure
 
 ```
-greenroom/
+strays/
 ├── CLAUDE.md
 ├── package.json
 ├── vite.config.ts
